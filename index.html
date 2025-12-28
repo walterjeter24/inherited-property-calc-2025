@@ -1,194 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inherited Property Capital Gains Calculator (2025 Guide)</title>
-    <meta name="description" content="Calculate your capital gains tax liability for an inherited house. Learn about stepped-up basis, heir splits, and how to sell tax-free in 2025.">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Inherited Property Capital Gains Calculator",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web Browser",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --secondary: #1e40af;
-            --accent: #f59e0b;
-            --light: #f3f4f6;
-            --dark: #1f2937;
-        }
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1, h2, h3 { color: var(--dark); }
-        .calculator-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin: 30px 0;
-            border-top: 5px solid var(--primary);
-        }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; }
-        input[type="number"], input[type="range"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        .result-box {
-            background: var(--light);
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: center;
-        }
-        .result-value {
-            font-size: 2em;
-            font-weight: 800;
-            color: var(--primary);
-        }
-        .cta-button {
-            display: block;
-            width: 100%;
-            background: var(--accent);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 8px;
-            font-size: 1.2em;
-            margin-top: 20px;
-            transition: transform 0.2s;
-        }
-        .cta-button:hover { transform: scale(1.02); background: #d97706; }
-        .tooltip { font-size: 0.85em; color: #666; margin-top: 5px; }
-        
-        article {
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .highlight { background: #fffbeb; padding: 2px 5px; border-radius: 4px; }
-    </style>
-</head>
-<body>
-
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1 style="font-size: 2.5em; margin-bottom: 10px;">Inherited Property Capital Gains Calculator</h1>
-        <p style="font-size: 1.2em; color: #666;">Estimate your taxes, splits among heirs, and net cash in seconds.</p>
-    </header>
-
-    <!-- THE TOOL -->
-    <div class="calculator-card" id="tool">
-        <div class="input-group">
-            <label for="stepUpValue">Value at Date of Death (Stepped-Up Basis)</label>
-            <input type="number" id="stepUpValue" placeholder="$300,000" oninput="calculate()">
-            <div class="tooltip">This is the fair market value when the owner passed away. You typically don't pay tax on value prior to this.</div>
-        </div>
-
-        <div class="input-group">
-            <label for="salePrice">Estimated Sale Price (Today)</label>
-            <input type="number" id="salePrice" placeholder="$320,000" oninput="calculate()">
-        </div>
-
-        <div class="input-group">
-            <label for="repairs">Renovations & Selling Costs</label>
-            <input type="number" id="repairs" placeholder="$25,000 (Agent fees, repairs, closing)" oninput="calculate()">
-        </div>
-
-        <div class="input-group">
-            <label for="heirs">Number of Heirs</label>
-            <input type="number" id="heirs" value="1" min="1" oninput="calculate()">
-        </div>
-
-        <div class="result-box">
-            <h3>Estimated Capital Gains Taxable Amount</h3>
-            <div class="result-value" id="taxableGain">$0</div>
-            <p style="font-size: 0.9em; color: #666;">(Most heirs pay $0 if sold quickly due to stepped-up basis!)</p>
-            
-            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ddd;">
-            
-            <h3>Estimated Cash Per Heir</h3>
-            <div class="result-value" id="cashPerHeir" style="color: #059669;">$0</div>
-        </div>
-
-        <a href="https://forms.google.com/your-form-link" class="cta-button">🚀 Get an Official Cash Offer for this Property</a>
-        <p style="text-align: center; margin-top: 10px; font-size: 0.9em;">(Skip repairs, skip commissions, sell "As-Is")</p>
-    </div>
-
-    <!-- THE WRAPPER CONTENT -->
-    <article>
-        <h2>The Ultimate Guide to Selling Inherited Property in 2025</h2>
-        <p>Inheriting a home can be a blessing and a burden. One of the biggest questions we get is: <strong>"Do I have to pay taxes on a house I inherited?"</strong></p>
-        
-        <p>The short answer is: <em>Probably not much, thanks to the 'Stepped-Up Basis'.</em></p>
-
-        <h3>What is Stepped-Up Basis?</h3>
-        <p>When you inherit a property, the IRS "resets" the value of the home to its fair market value on the date of the previous owner's death. This is called the <span class="highlight">Stepped-Up Basis</span>.</p>
-        
-        <p><strong>Example:</strong> Mom bought the house in 1990 for $50,000. It was worth $300,000 when she passed away. You sell it for $300,000.</p>
-        <ul>
-            <li><strong>Without Step-Up:</strong> You'd pay tax on $250,000 gain.</li>
-            <li><strong>With Step-Up:</strong> You pay tax on $0 gain.</li>
-        </ul>
-
-        <h3>Should You Renovate or Sell As-Is?</h3>
-        <p>Many heirs calculate the cost of repairs incorrectly. If the house needs a new roof ($15k), HVAC ($8k), and modern kitchen ($25k), you are looking at $48,000 out of pocket before you even list it.</p>
-        
-        <h3>Can One Heir Force a Sale?</h3>
-        <p>Yes. In most states, if heirs generally cannot agree, one heir can file a "Partition Action" lawsuit to force the sale of the property. This is expensive and drains the equity. It is almost always better to agree on a buyout or a sale to a third-party investor.</p>
-
-        <h3>FAQ</h3>
-        <dl>
-            <dt><strong>How are proceeds split?</strong></dt>
-            <dd>Proceeds are split according to the will or state probate laws (usually equally among children).</dd>
-            
-            <dt><strong>Who pays the mortgage while in probate?</strong></dt>
-            <dd>The estate is responsible, but if the estate has no cash, the heirs may need to cover it to avoid foreclosure.</dd>
-        </dl>
-    </article>
+    <title>Heart & Home Properties | Sell Fast</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Outfit & Open Sans -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
-        function calculate() {
-            // Inputs
-            const basis = parseFloat(document.getElementById('stepUpValue').value) || 0;
-            const price = parseFloat(document.getElementById('salePrice').value) || 0;
-            const costs = parseFloat(document.getElementById('repairs').value) || 0;
-            const heirs = parseFloat(document.getElementById('heirs').value) || 1;
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#091C36',    // Navy
+                        accent: '#FF6A3D',     // Electric Orange
+                        secondary: '#4A5568',  // Slate
+                        bgSoft: '#F7FAFC',     // Off-White
+                    },
+                    fontFamily: {
+                        heading: ['Outfit', 'sans-serif'],
+                        body: ['Open Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
 
-            // Calculations
-            // Gain = (Sale Price - Selling Costs) - Basis
-            // If negative, gain is 0 (loss)
-            let netProceeds = price - costs;
-            let gain = netProceeds - basis;
-            
-            // Logic: If sold quickly, gain is usually minimal or zero due to step-up
-            if (gain < 0) gain = 0;
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Outfit', sans-serif;
+        }
 
-            // Display
-            document.getElementById('taxableGain').innerText = "$" + gain.toLocaleString();
-            document.getElementById('cashPerHeir').innerText = "$" + (netProceeds / heirs).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-bgSoft text-primary antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="text-2xl font-bold font-heading tracking-tight">
+                <i class="fa-solid fa-heart text-accent mr-2"></i>Heart & Home<span class="text-secondary font-normal">
+                    Properties</span>
+            </div>
+            <div class="hidden md:flex space-x-8 font-semibold text-secondary">
+                <a href="#how-it-works" class="hover:text-primary transition">How it Works</a>
+                <a href="#comparison" class="hover:text-primary transition">Us vs. Agents</a>
+                <a href="#testimonials" class="text-accent hover:text-orange-700 transition"><i
+                        class="fa-solid fa-users mr-1"></i> Success Stories</a>
+            </div>
+            <a href="tel:555-123-4567" class="md:hidden text-accent text-xl"><i class="fa-solid fa-phone"></i></a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-primary text-white overflow-hidden min-h-screen lg:min-h-0">
+        <!-- Abstract Background Shape -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-accent opacity-10 blur-3xl"></div>
+
+        <div class="container mx-auto px-6 py-12 lg:py-24 flex flex-col lg:flex-row items-center">
+
+            <!-- Left: Copy -->
+            <div class="w-full lg:w-1/2 lg:pr-12 mb-12 lg:mb-0 z-10">
+                <div
+                    class="inline-block bg-accent/20 text-accent font-bold px-4 py-1 rounded-full text-sm mb-6 border border-accent/30">
+                    <i class="fa-solid fa-check-circle mr-2"></i> #1 Rated Local Buyer
+                </div>
+                <h1 class="text-4xl lg:text-6xl font-extrabold leading-tight mb-6">
+                    Get Cash for your house. <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-orange-400">Sell in
+                        Days.</span>
+                </h1>
+                <p class="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
+                    No cleaning. No repairs. No fees. Just a fair cash offer and a move-out date that works for you.
+                </p>
+                <div
+                    class="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-8 text-gray-300 text-sm font-semibold">
+                    <div class="flex items-center"><i class="fa-regular fa-clock text-accent mr-2 text-lg"></i> Close in
+                        7 Days</div>
+                    <div class="flex items-center"><i class="fa-solid fa-shield-halved text-accent mr-2 text-lg"></i>
+                        As-Is Condition</div>
+                    <div class="flex items-center"><i class="fa-solid fa-dollar-sign text-accent mr-2 text-lg"></i> Zero
+                        Fees</div>
+                </div>
+            </div>
+
+            <!-- Right: Wizard Card (7 Steps) -->
+            <div class="w-full lg:w-1/2 z-10 mt-8 lg:mt-0">
+                <div class="bg-white text-primary rounded-2xl shadow-2xl p-6 lg:p-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-accent"></div>
+
+                    <!-- Wizard Progress -->
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-xs font-bold text-secondary uppercase tracking-wider" id="step-label">Step 1
+                            of 7</span>
+                        <div class="h-1 w-full bg-gray-200 ml-4 rounded-full">
+                            <div class="h-1 bg-accent rounded-full transition-all duration-300" style="width: 14%"
+                                id="progress-bar"></div>
+                        </div>
+                    </div>
+
+                    <form id="offerForm" onsubmit="return false;">
+
+                        <!-- Step 1: Address -->
+                        <div class="wizard-step active" id="step1">
+                            <h3 class="text-2xl font-bold mb-2">What is the address?</h3>
+                            <p class="text-secondary mb-6 text-sm">We use this to analyze recent sales in your
+                                neighborhood.</p>
+                            <div class="relative mb-6">
+                                <i class="fa-solid fa-location-dot absolute left-4 top-4 text-gray-400"></i>
+                                <input type="text" placeholder="Enter Property Address..."
+                                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-accent focus:outline-none transition font-semibold text-lg">
+                            </div>
+                            <button onclick="nextStep(2)"
+                                class="w-full bg-accent hover:bg-orange-600 text-white font-bold py-4 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 text-lg">
+                                Next <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Step 2: Property Specs -->
+                        <div class="wizard-step" id="step2">
+                            <h3 class="text-2xl font-bold mb-2">Build Details</h3>
+                            <p class="text-secondary mb-6 text-sm">Tell us about the layout.</p>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-secondary mb-1">Beds</label>
+                                    <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option selected>3</option>
+                                        <option>4</option>
+                                        <option>5+</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-secondary mb-1">Baths</label>
+                                    <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg">
+                                        <option>1</option>
+                                        <option>1.5</option>
+                                        <option selected>2</option>
+                                        <option>2.5</option>
+                                        <option>3+</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-xs font-bold text-secondary mb-1">Square Feet (Approx)</label>
+                                <input type="number" placeholder="e.g. 1500"
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-accent">
+                            </div>
+
+                            <button onclick="nextStep(3)"
+                                class="w-full bg-primary hover:bg-navy-800 text-white font-bold py-4 rounded-lg shadow-lg mb-3">
+                                Next <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                            <button onclick="prevStep(1)"
+                                class="w-full text-sm text-secondary hover:text-primary font-semibold py-2">Back</button>
+                        </div>
+
+                        <!-- Step 3: Motivation -->
+                        <div class="wizard-step" id="step3">
+                            <h3 class="text-2xl font-bold mb-2">Situation</h3>
+                            <p class="text-secondary mb-6 text-sm">Why are you looking to sell?</p>
+
+                            <div class="space-y-3 mb-6">
+                                <label class="block text-xs font-bold text-secondary">Main Reason</label>
+                                <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg mb-4">
+                                    <option>Inherited Property</option>
+                                    <option>Relocating</option>
+                                    <option>Upgrading / Downsizing</option>
+                                    <option>Need Cash / Financial</option>
+                                    <option>Tired Landlord</option>
+                                    <option>Just Curious</option>
+                                </select>
+
+                                <label class="block text-xs font-bold text-secondary">Timeline</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button
+                                        class="border p-2 rounded hover:bg-orange-50 hover:border-accent text-sm font-semibold">ASAP
+                                        (7-14 Days)</button>
+                                    <button
+                                        class="border p-2 rounded hover:bg-orange-50 hover:border-accent text-sm font-semibold">30
+                                        Days</button>
+                                    <button
+                                        class="border p-2 rounded hover:bg-orange-50 hover:border-accent text-sm font-semibold">Flexible</button>
+                                </div>
+                            </div>
+
+                            <button onclick="nextStep(4)"
+                                class="w-full bg-primary hover:bg-navy-800 text-white font-bold py-4 rounded-lg shadow-lg mb-3">
+                                Next <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                            <button onclick="prevStep(2)"
+                                class="w-full text-sm text-secondary hover:text-primary font-semibold py-2">Back</button>
+                        </div>
+
+                        <!-- Step 4: System Condition (NEW) -->
+                        <div class="wizard-step" id="step4">
+                            <h3 class="text-2xl font-bold mb-2">Major Systems Check</h3>
+                            <p class="text-secondary mb-4 text-sm">Help us estimate repairs accurately.</p>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-secondary mb-1">Roof Age</label>
+                                    <select class="w-full px-3 py-2 border rounded text-sm">
+                                        <option>New (< 5 years)</option>
+                                        <option>Mid-Life (5-15 years)</option>
+                                        <option>Old (15+ years)</option>
+                                        <option>Leaking / Needs Replace</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-secondary mb-1">HVAC / AC</label>
+                                    <select class="w-full px-3 py-2 border rounded text-sm">
+                                        <option>Working Great</option>
+                                        <option>Old but Works</option>
+                                        <option>Not Working</option>
+                                        <option>None</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-xs font-bold text-secondary mb-1">Foundation Condition</label>
+                                <div class="flex space-x-2">
+                                    <button
+                                        class="flex-1 border p-2 rounded text-xs hover:bg-green-50 hover:border-green-500 font-semibold">Good</button>
+                                    <button
+                                        class="flex-1 border p-2 rounded text-xs hover:bg-yellow-50 hover:border-yellow-500 font-semibold">Settling</button>
+                                    <button
+                                        class="flex-1 border p-2 rounded text-xs hover:bg-red-50 hover:border-red-500 font-semibold">Cracks/Issues</button>
+                                </div>
+                            </div>
+
+                            <textarea placeholder="Other issues? (Plumbing, Electrical, etc.)"
+                                class="w-full border rounded p-2 text-sm mb-4 h-20"></textarea>
+
+                            <button onclick="nextStep(5)"
+                                class="w-full bg-primary hover:bg-navy-800 text-white font-bold py-4 rounded-lg shadow-lg mb-3">
+                                Next <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                            <button onclick="prevStep(3)"
+                                class="w-full text-sm text-secondary hover:text-primary font-semibold py-2">Back</button>
+                        </div>
+
+
+                        <!-- Step 5: Creative Finance -->
+                        <div class="wizard-step" id="step5">
+                            <h3 class="text-2xl font-bold mb-2">Price or Terms?</h3>
+                            <p class="text-secondary mb-6 text-sm">Would you accept monthly payments for a
+                                <strong>Higher Price</strong>?</p>
+
+                            <div class="space-y-4 mb-6">
+                                <button onclick="nextStep(6)"
+                                    class="w-full text-left px-6 py-4 border-2 border-gray-100 rounded-xl hover:border-accent hover:bg-orange-50 transition flex items-center group">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-4">
+                                        <i class="fa-solid fa-check"></i></div>
+                                    <div>
+                                        <div class="font-bold">Yes, for a higher price.</div>
+                                        <div class="text-xs text-secondary">I'm open to "Creative Financing".</div>
+                                    </div>
+                                </button>
+                                <button onclick="nextStep(6)"
+                                    class="w-full text-left px-6 py-4 border-2 border-gray-100 rounded-xl hover:border-accent hover:bg-orange-50 transition flex items-center group">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-4">
+                                        <i class="fa-solid fa-dollar-sign"></i></div>
+                                    <div>
+                                        <div class="font-bold">No, Cash Only.</div>
+                                        <div class="text-xs text-secondary">I prefer a lump sum, even if lower.</div>
+                                    </div>
+                                </button>
+                            </div>
+                            <button onclick="prevStep(4)"
+                                class="w-full text-sm text-secondary hover:text-primary font-semibold py-2">Back</button>
+                        </div>
+
+                        <!-- Step 6: Photos (Optional) -->
+                        <div class="wizard-step" id="step6">
+                            <h3 class="text-2xl font-bold mb-2">Photos (Optional)</h3>
+                            <p class="text-secondary mb-6 text-sm">Upload pictures if you have them handy.</p>
+
+                            <div
+                                class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center mb-6 hover:border-accent hover:bg-gray-50 transition cursor-pointer">
+                                <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-300 mb-3"></i>
+                                <div class="font-bold text-secondary">Click to Upload</div>
+                                <div class="text-xs text-gray-400">or drag and drop here</div>
+                            </div>
+
+                            <button onclick="nextStep(7)"
+                                class="w-full bg-primary hover:bg-navy-800 text-white font-bold py-4 rounded-lg shadow-lg mb-3">
+                                Next (Or Skip) <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                            <button onclick="prevStep(5)"
+                                class="w-full text-sm text-secondary hover:text-primary font-semibold py-2">Back</button>
+                        </div>
+
+                        <!-- Step 7: Contact -->
+                        <div class="wizard-step" id="step7">
+                            <h3 class="text-2xl font-bold mb-2">Unlock Your Offer</h3>
+                            <p class="text-secondary mb-6 text-sm">Where should we send the numbers?</p>
+
+                            <div class="space-y-4 mb-6">
+                                <input type="text" placeholder="Full Name"
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-accent focus:outline-none transition">
+                                <input type="tel" placeholder="Mobile Phone (for text offer)"
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-accent focus:outline-none transition">
+                                <input type="email" placeholder="Email Address (Optional)"
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-accent focus:outline-none transition">
+                            </div>
+
+                            <button
+                                class="w-full bg-accent hover:bg-orange-600 text-white font-bold py-4 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 text-lg mb-4">
+                                Reveal My Cash Offer <i class="fa-solid fa-unlock ml-2"></i>
+                            </button>
+                            <button onclick="prevStep(6)"
+                                class="w-full text-sm text-secondary hover:text-primary font-semibold py-2">Back</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-white" id="testimonials">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-extrabold mb-4 font-heading">Families We've Helped</h2>
+                <p class="text-secondary text-lg">Real people. Real cash offers. Zero stress.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <!-- Card 1: Inherited -->
+                <div class="bg-bgSoft p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gray-100">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="Sarah J"
+                            class="w-16 h-16 rounded-full border-4 border-white shadow-md">
+                        <div class="ml-4">
+                            <div class="font-bold text-primary">Sarah J.</div>
+                            <div class="text-xs text-secondary uppercase tracking-widest font-semibold">Inherited House
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-accent font-bold text-3xl mb-4 font-heading">$145,000 <span
+                            class="text-sm font-normal text-secondary">Cash Paid</span></div>
+                    <p class="text-secondary italic mb-6">"I didn't have the money to fix up my mom's house after she
+                        passed. Heart & Home bought it as-is, full of old furniture. It was such a relief."</p>
+                    <div class="flex text-yellow-500">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2: Tired Landlord (4 Stars) -->
+                <div class="bg-bgSoft p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gray-100">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mike T"
+                            class="w-16 h-16 rounded-full border-4 border-white shadow-md">
+                        <div class="ml-4">
+                            <div class="font-bold text-primary">Mike T.</div>
+                            <div class="text-xs text-secondary uppercase tracking-widest font-semibold">Tired Landlord
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-accent font-bold text-3xl mb-4 font-heading">$88,500 <span
+                            class="text-sm font-normal text-secondary">Cash Paid</span></div>
+                    <p class="text-secondary italic mb-6">"My tenants stopped paying rent. The eviction process was
+                        slow. They drove a hard bargain on price, but closed in 10 days flat. Worth it."</p>
+                    <div class="flex text-yellow-500">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-regular fa-star"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3: Grandma Betty (4.5 Stars) -->
+                <div class="bg-bgSoft p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gray-100">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/90.jpg" alt="Betty R"
+                            class="w-16 h-16 rounded-full border-4 border-white shadow-md">
+                        <div class="ml-4">
+                            <div class="font-bold text-primary">Betty R.</div>
+                            <div class="text-xs text-secondary uppercase tracking-widest font-semibold">Downsizing</div>
+                        </div>
+                    </div>
+                    <div class="text-accent font-bold text-3xl mb-4 font-heading">$215,000 <span
+                            class="text-sm font-normal text-secondary">Cash Paid</span></div>
+                    <p class="text-secondary italic mb-6">"Moving to senior living was overwhelming after 40 years. They
+                        let me leave what I didn't want and handled all the heavy lifting. Such sweet boys."</p>
+                    <div class="flex text-yellow-500">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="py-20 bg-bgSoft" id="comparison">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-extrabold mb-4 font-heading">Selling to Us vs. Listing</h2>
+                <p class="text-secondary text-lg">Why wait months when you can be done in days?</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-5xl mx-auto border border-gray-100">
+                <div class="grid grid-cols-3 bg-primary text-white font-bold text-lg p-6">
+                    <div class="col-span-1">Feature</div>
+                    <div class="col-span-1 text-center text-accent"><i class="fa-solid fa-heart mr-2"></i> Heart & Home
+                    </div>
+                    <div class="col-span-1 text-center font-normal opacity-75">Traditional Agent</div>
+                </div>
+
+                <!-- Row 1 -->
+                <div class="grid grid-cols-3 p-6 border-b border-gray-100 hover:bg-blue-50 transition">
+                    <div class="font-bold text-secondary">Commissions & Fees</div>
+                    <div class="text-center font-bold text-green-600">NONE ($0)</div>
+                    <div class="text-center text-red-500">6% + Closing Costs</div>
+                </div>
+                <!-- Row 2 -->
+                <div class="grid grid-cols-3 p-6 border-b border-gray-100 hover:bg-blue-50 transition">
+                    <div class="font-bold text-secondary">Closing Timeline</div>
+                    <div class="text-center font-bold text-green-600">7 - 14 Days</div>
+                    <div class="text-center text-secondary">60 - 90 Days</div>
+                </div>
+                <!-- Row 3 -->
+                <div class="grid grid-cols-3 p-6 border-b border-gray-100 hover:bg-blue-50 transition">
+                    <div class="font-bold text-secondary">Repairs Needed?</div>
+                    <div class="text-center font-bold text-green-600">NONE (Sell As-Is)</div>
+                    <div class="text-center text-secondary">You fix it first</div>
+                </div>
+                <!-- Row 4 -->
+                <div class="grid grid-cols-3 p-6 hover:bg-blue-50 transition">
+                    <div class="font-bold text-secondary">Privacy</div>
+                    <div class="text-center font-bold text-green-600">100% Confidential</div>
+                    <div class="text-center text-secondary">Nosy Neighbors & Open Houses</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <div class="text-2xl font-bold font-heading mb-2">Heart & Home<span class="font-normal">
+                        Properties</span></div>
+                <p class="text-gray-400 text-sm">© 2025 All Rights Reserved.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Wizard Logic -->
+    <script>
+        let currentStep = 1;
+        const totalSteps = 7;
+
+        function nextStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const percent = (currentStep / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            document.getElementById('step-label').innerText = `Step ${currentStep} of ${totalSteps}`;
         }
     </script>
 </body>
+
 </html>
