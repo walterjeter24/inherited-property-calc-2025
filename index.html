@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inherited Property Capital Gains Calculator (2025 Guide)</title>
+    <meta name="description" content="Calculate your capital gains tax liability for an inherited house. Learn about stepped-up basis, heir splits, and how to sell tax-free in 2025.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Inherited Property Capital Gains Calculator",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 { color: var(--dark); }
+        .calculator-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 30px 0;
+            border-top: 5px solid var(--primary);
+        }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        input[type="number"], input[type="range"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .result-box {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .result-value {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .cta-button {
+            display: block;
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 1.2em;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .cta-button:hover { transform: scale(1.02); background: #d97706; }
+        .tooltip { font-size: 0.85em; color: #666; margin-top: 5px; }
+        
+        article {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .highlight { background: #fffbeb; padding: 2px 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1 style="font-size: 2.5em; margin-bottom: 10px;">Inherited Property Capital Gains Calculator</h1>
+        <p style="font-size: 1.2em; color: #666;">Estimate your taxes, splits among heirs, and net cash in seconds.</p>
+    </header>
+
+    <!-- THE TOOL -->
+    <div class="calculator-card" id="tool">
+        <div class="input-group">
+            <label for="stepUpValue">Value at Date of Death (Stepped-Up Basis)</label>
+            <input type="number" id="stepUpValue" placeholder="$300,000" oninput="calculate()">
+            <div class="tooltip">This is the fair market value when the owner passed away. You typically don't pay tax on value prior to this.</div>
+        </div>
+
+        <div class="input-group">
+            <label for="salePrice">Estimated Sale Price (Today)</label>
+            <input type="number" id="salePrice" placeholder="$320,000" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label for="repairs">Renovations & Selling Costs</label>
+            <input type="number" id="repairs" placeholder="$25,000 (Agent fees, repairs, closing)" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label for="heirs">Number of Heirs</label>
+            <input type="number" id="heirs" value="1" min="1" oninput="calculate()">
+        </div>
+
+        <div class="result-box">
+            <h3>Estimated Capital Gains Taxable Amount</h3>
+            <div class="result-value" id="taxableGain">$0</div>
+            <p style="font-size: 0.9em; color: #666;">(Most heirs pay $0 if sold quickly due to stepped-up basis!)</p>
+            
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ddd;">
+            
+            <h3>Estimated Cash Per Heir</h3>
+            <div class="result-value" id="cashPerHeir" style="color: #059669;">$0</div>
+        </div>
+
+        <a href="https://forms.google.com/your-form-link" class="cta-button">🚀 Get an Official Cash Offer for this Property</a>
+        <p style="text-align: center; margin-top: 10px; font-size: 0.9em;">(Skip repairs, skip commissions, sell "As-Is")</p>
+    </div>
+
+    <!-- THE WRAPPER CONTENT -->
+    <article>
+        <h2>The Ultimate Guide to Selling Inherited Property in 2025</h2>
+        <p>Inheriting a home can be a blessing and a burden. One of the biggest questions we get is: <strong>"Do I have to pay taxes on a house I inherited?"</strong></p>
+        
+        <p>The short answer is: <em>Probably not much, thanks to the 'Stepped-Up Basis'.</em></p>
+
+        <h3>What is Stepped-Up Basis?</h3>
+        <p>When you inherit a property, the IRS "resets" the value of the home to its fair market value on the date of the previous owner's death. This is called the <span class="highlight">Stepped-Up Basis</span>.</p>
+        
+        <p><strong>Example:</strong> Mom bought the house in 1990 for $50,000. It was worth $300,000 when she passed away. You sell it for $300,000.</p>
+        <ul>
+            <li><strong>Without Step-Up:</strong> You'd pay tax on $250,000 gain.</li>
+            <li><strong>With Step-Up:</strong> You pay tax on $0 gain.</li>
+        </ul>
+
+        <h3>Should You Renovate or Sell As-Is?</h3>
+        <p>Many heirs calculate the cost of repairs incorrectly. If the house needs a new roof ($15k), HVAC ($8k), and modern kitchen ($25k), you are looking at $48,000 out of pocket before you even list it.</p>
+        
+        <h3>Can One Heir Force a Sale?</h3>
+        <p>Yes. In most states, if heirs generally cannot agree, one heir can file a "Partition Action" lawsuit to force the sale of the property. This is expensive and drains the equity. It is almost always better to agree on a buyout or a sale to a third-party investor.</p>
+
+        <h3>FAQ</h3>
+        <dl>
+            <dt><strong>How are proceeds split?</strong></dt>
+            <dd>Proceeds are split according to the will or state probate laws (usually equally among children).</dd>
+            
+            <dt><strong>Who pays the mortgage while in probate?</strong></dt>
+            <dd>The estate is responsible, but if the estate has no cash, the heirs may need to cover it to avoid foreclosure.</dd>
+        </dl>
+    </article>
+
+    <script>
+        function calculate() {
+            // Inputs
+            const basis = parseFloat(document.getElementById('stepUpValue').value) || 0;
+            const price = parseFloat(document.getElementById('salePrice').value) || 0;
+            const costs = parseFloat(document.getElementById('repairs').value) || 0;
+            const heirs = parseFloat(document.getElementById('heirs').value) || 1;
+
+            // Calculations
+            // Gain = (Sale Price - Selling Costs) - Basis
+            // If negative, gain is 0 (loss)
+            let netProceeds = price - costs;
+            let gain = netProceeds - basis;
+            
+            // Logic: If sold quickly, gain is usually minimal or zero due to step-up
+            if (gain < 0) gain = 0;
+
+            // Display
+            document.getElementById('taxableGain').innerText = "$" + gain.toLocaleString();
+            document.getElementById('cashPerHeir').innerText = "$" + (netProceeds / heirs).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+        }
+    </script>
+</body>
+</html>
